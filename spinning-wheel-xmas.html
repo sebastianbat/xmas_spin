@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎄(っ◔◡◔)っ ♥ XMAS SPIN ♥ 🎄</title>
+    <style>
+
+        :root {
+
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a472a 0%, #0f2818 100%);
+            font-family: 'Helvetica', sans-serif;
+        }
+
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 700px;
+            height: 700px;
+        }
+
+        canvas {
+            display: block;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+        }
+
+        .pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #dc143c;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+            z-index: 10;
+        }
+
+        .center-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #ffd700, #ffed4e);
+            border: 4px solid #dc143c;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            color: #8b0000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .center-button:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .center-button:active {
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+
+        .result {
+            font-size: 28px;
+            color: #ffd700;
+            font-weight: bold;
+            text-align: center;
+            min-height: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: white;
+            font-size: 20px;
+            opacity: 0.8;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Snowflakes -->
+    <div class="snowflake" style="left: 10%; animation-duration: 10s;">❄</div>
+    <div class="snowflake" style="left: 20%; animation-duration: 12s; animation-delay: 1s;">❄</div>
+    <div class="snowflake" style="left: 30%; animation-duration: 15s; animation-delay: 2s;">❄</div>
+    <div class="snowflake" style="left: 40%; animation-duration: 11s; animation-delay: 0.5s;">❄</div>
+    <div class="snowflake" style="left: 50%; animation-duration: 13s; animation-delay: 1.5s;">❄</div>
+    <div class="snowflake" style="left: 60%; animation-duration: 14s; animation-delay: 0s;">❄</div>
+    <div class="snowflake" style="left: 70%; animation-duration: 10s; animation-delay: 2.5s;">❄</div>
+    <div class="snowflake" style="left: 80%; animation-duration: 12s; animation-delay: 1s;">❄</div>
+    <div class="snowflake" style="left: 90%; animation-duration: 11s; animation-delay: 3s;">❄</div>
+
+    <div class="container">
+        <div class="wheel-container">
+            <div class="pointer"></div>
+            <canvas id="wheel" width="700" height="700"></canvas>
+            <button class="center-button" id="spinBtn">SPIN!</button>
+        </div>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        // ============ CUSTOMIZE ============
+        const segments = [
+            'Bebida Natalina',
+            'Baking',
+            'Filme de Natal',
+            'Prepare gifts',
+            'Ir lugar decorado',
+            'Journaling',
+            'Presente',
+            'Date de Leitura'
+        ];
+
+        // Christmas color palette
+        const colors = [
+            '#dc143c',  // Crimson red
+            '#228b22',  // Forest green
+            '#ffd700',  // Gold
+            '#8b0000',  // Dark red
+            '#006400',  // Dark green
+            '#ffcc00',  // Bright gold
+            '#b22222',  // Fire brick
+            '#2e8b57'   // Sea green
+        ];
+        // ===================================================
+
+        const canvas = document.getElementById('wheel');
+        const ctx = canvas.getContext('2d');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultDiv = document.getElementById('result');
+
+        let currentRotation = 0;
+        let isSpinning = false;
+
+        function drawWheel() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = canvas.width / 2 - 10;
+            const segmentAngle = (2 * Math.PI) / segments.length;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(currentRotation);
+
+            // Draw segments (offset by -90 degrees to align with top pointer)
+            for (let i = 0; i < segments.length; i++) {
+                const startAngle = i * segmentAngle - Math.PI / 2;
+                const endAngle = startAngle + segmentAngle;
+
+                // Draw segment
+                ctx.beginPath();
+                ctx.arc(0, 0, radius, startAngle, endAngle);
+                ctx.lineTo(0, 0);
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                // Draw text
+                ctx.save();
+                ctx.rotate(startAngle + segmentAngle / 2);
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 24px Helvetica';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                ctx.shadowBlur = 3;
+                ctx.fillText(segments[i], radius * 0.65, 0);
+                ctx.restore();
+            }
+
+            // Draw outer circle
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 5;
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        function spinWheel() {
+            if (isSpinning) return;
+            
+            isSpinning = true;
+            resultDiv.textContent = '';
+            
+            const spinTime = 4000;
+            const spinRotation = Math.random() * 360 + 1800; // At least 5 full rotations
+            const startRotation = currentRotation;
+            const startTime = Date.now();
+
+            function animate() {
+                const now = Date.now();
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / spinTime, 1);
+                
+                // Easing function for smooth deceleration
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                
+                currentRotation = startRotation + (spinRotation * easeOut * Math.PI / 180);
+                drawWheel();
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    isSpinning = false;
+                    announceWinner();
+                }
+            }
+
+            animate();
+        }
+
+        function announceWinner() {
+            const segmentAngle = (2 * Math.PI) / segments.length;
+            const normalizedRotation = (currentRotation % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+            // Adjust for half segment offset and invert direction
+            const adjustedRotation = normalizedRotation + (segmentAngle / 2);
+            const winningIndex = (segments.length - Math.floor(adjustedRotation / segmentAngle)) % segments.length;
+            
+            resultDiv.textContent = `🎄 ${segments[winningIndex]} 🎄`;
+        }
+
+        spinBtn.addEventListener('click', spinWheel);
+
+        // Initial draw
+        drawWheel();
+    </script>
+</body>
+</html>

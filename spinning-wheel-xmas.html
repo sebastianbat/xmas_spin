@@ -19,7 +19,7 @@
             justify-content: center;
             min-height: 100vh;
             background: linear-gradient(135deg, #1a472a 0%, #0f2818 100%);
-            font-family: 'Helvetica', sans-serif;
+            font-family: 'Times New Roman', serif;
         }
 
         .container {
@@ -36,9 +36,20 @@
             height: 700px;
         }
 
+        .credits { 
+            color: #fff;
+            text-align: center;
+            line-height: 25px;
+        }
+
+        .copyright {
+            font-weight: bold;
+            font-style: italic;
+            text-transform: uppercase;
+        }
+
         canvas {
             display: block;
-            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
         }
 
         .pointer {
@@ -51,7 +62,6 @@
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
             border-top: 40px solid #dc143c;
-            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
             z-index: 10;
         }
 
@@ -115,14 +125,23 @@
 <body>
     <!-- Snowflakes -->
     <div class="snowflake" style="left: 10%; animation-duration: 10s;">❄</div>
-    <div class="snowflake" style="left: 20%; animation-duration: 12s; animation-delay: 1s;">❄</div>
-    <div class="snowflake" style="left: 30%; animation-duration: 15s; animation-delay: 2s;">❄</div>
-    <div class="snowflake" style="left: 40%; animation-duration: 11s; animation-delay: 0.5s;">❄</div>
-    <div class="snowflake" style="left: 50%; animation-duration: 13s; animation-delay: 1.5s;">❄</div>
-    <div class="snowflake" style="left: 60%; animation-duration: 14s; animation-delay: 0s;">❄</div>
+    <div class="snowflake" style="left: 15%; animation-duration: 12s;">❄</div>
+    <div class="snowflake" style="left: 20%; animation-duration: 14s; animation-delay: 1s;">❄</div>
+    <div class="snowflake" style="left: 25%; animation-duration: 16s; animation-delay: 1s;">❄</div>
+    <div class="snowflake" style="left: 30%; animation-duration: 18s; animation-delay: 2s;">❄</div>
+    <div class="snowflake" style="left: 35%; animation-duration: 20s; animation-delay: 2s;">❄</div>
+    <div class="snowflake" style="left: 40%; animation-duration: 10s; animation-delay: 0.5s;">❄</div>
+    <div class="snowflake" style="left: 45%; animation-duration: 13s; animation-delay: 0.5s;">❄</div>
+    <div class="snowflake" style="left: 50%; animation-duration: 16s; animation-delay: 1.5s;">❄</div>
+    <div class="snowflake" style="left: 55%; animation-duration: 18s; animation-delay: 1.5s;">❄</div>
+    <div class="snowflake" style="left: 60%; animation-duration: 11s; animation-delay: 0s;">❄</div>
+    <div class="snowflake" style="left: 65%; animation-duration: 13s; animation-delay: 0s;">❄</div>
     <div class="snowflake" style="left: 70%; animation-duration: 10s; animation-delay: 2.5s;">❄</div>
-    <div class="snowflake" style="left: 80%; animation-duration: 12s; animation-delay: 1s;">❄</div>
-    <div class="snowflake" style="left: 90%; animation-duration: 11s; animation-delay: 3s;">❄</div>
+    <div class="snowflake" style="left: 75%; animation-duration: 9s; animation-delay: 2.5s;">❄</div>
+    <div class="snowflake" style="left: 80%; animation-duration: 16s; animation-delay: 1s;">❄</div>
+    <div class="snowflake" style="left: 85%; animation-duration: 12s; animation-delay: 1s;">❄</div>
+    <div class="snowflake" style="left: 90%; animation-duration: 10s; animation-delay: 3s;">❄</div>
+    <div class="snowflake" style="left: 95%; animation-duration: 18s; animation-delay: 3s;">❄</div>
 
     <div class="container">
         <div class="wheel-container">
@@ -198,9 +217,7 @@
                 ctx.rotate(startAngle + segmentAngle / 2);
                 ctx.textAlign = 'center';
                 ctx.fillStyle = '#fff';
-                ctx.font = 'bold 24px Helvetica';
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-                ctx.shadowBlur = 3;
+                ctx.font = 'bold 24px Times New Roman';
                 ctx.fillText(segments[i], radius * 0.65, 0);
                 ctx.restore();
             }
@@ -241,21 +258,10 @@
                     requestAnimationFrame(animate);
                 } else {
                     isSpinning = false;
-                    //announceWinner();
                 }
             }
 
             animate();
-        }
-
-        function announceWinner() {
-            const segmentAngle = (2 * Math.PI) / segments.length;
-            const normalizedRotation = (currentRotation % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
-            // Adjust for half segment offset and invert direction
-            const adjustedRotation = normalizedRotation + (segmentAngle / 2);
-            const winningIndex = (segments.length - Math.floor(adjustedRotation / segmentAngle)) % segments.length;
-            
-            resultDiv.textContent = `🎄 ${segments[winningIndex]} 🎄`;
         }
 
         spinBtn.addEventListener('click', spinWheel);
@@ -263,5 +269,6 @@
         // Initial draw
         drawWheel();
     </script>
+    <div class="credits"><p>For Jujuba ♥ <br><span class="copyright">© BECA APPROVED 2025</span></p></div>
 </body>
 </html>

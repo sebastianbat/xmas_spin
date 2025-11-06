@@ -113,8 +113,28 @@
             }
         }
     </style>
+
+    
+        <script>
+
+    function PlayMusic() {
+      var play=document.getElementById("music");
+      play.play();
+    }
+    
+    $(document).ready(function(){
+      setTimeout(PlayMusic,3000);
+    })
+    
+    </script>
+    
 </head>
 <body>
+
+    
+    <audio controls id="music" >
+      <source src="makemywishcometrue.mp3" type="audio/mp3">
+    </audio>
     <!-- Snowflakes -->
 <div class="snowflake" style="left: 7%; animation-duration: 11s; animation-delay: 0.3s;">꙳•̩̩͙❅*̩̩͙</div>
 <div class="snowflake" style="left: 18%; animation-duration: 15s; animation-delay: 2.7s;">❄</div>
@@ -160,7 +180,9 @@
         <div class="result" id="result"></div>
     </div>
 
-    <script>
+<script>
+
+        
         // ============ CUSTOMIZE ============
         const segments = [
             'Bebida Natalina',

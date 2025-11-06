@@ -112,6 +112,10 @@
                 transform: translateY(100vh);
             }
         }
+
+        audio {
+            display: none
+        }
     </style>
 
     
@@ -122,8 +126,8 @@
       play.play();
     }
     
-    $(document).ready(function(){
-      setTimeout(PlayMusic,0);
+    $(window).ready(function(){
+      PlayMusic();
     })
     
     </script>
@@ -132,7 +136,7 @@
 <body>
 
     
-    <audio controls id="music" style="display: hidden" >
+    <audio controls id="music"  >
       <source src="makemywishcometrue.mp3" type="audio/mp3">
     </audio>
     

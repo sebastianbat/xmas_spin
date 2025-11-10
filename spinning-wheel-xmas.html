@@ -272,10 +272,9 @@
             if (isSpinning) return;
             
             isSpinning = true;
-            resultDiv.textContent = '';
             
             const spinTime = 4000;
-            const spinRotation = Math.random() * 360 + 1800; // At least 5 full rotations
+            const spinRotation = Math.random() * 360 + 2160; // At least 6 full rotations with more randomness
             const startRotation = currentRotation;
             const startTime = Date.now();
 
